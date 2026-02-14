@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "publisher": "AnasFiguigui",
   "license": "MIT",
-  "icon": "icon.png",
+  "icon": "images/icon.png",
   "galleryBanner": {
     "color": "#0080ff",
     "theme": "light"
