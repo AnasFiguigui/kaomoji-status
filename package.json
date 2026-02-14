@@ -2,7 +2,7 @@
   "name": "kaomoji-status",
   "displayName": "Kaomoji Status",
   "description": "Fun animated kaomojis in your VS Code status bar!",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "AnasFiguigui",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -53,7 +53,7 @@
     "extension"
   ],
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": ">=1.60.0"
   },
   "categories": [
     "Other",
