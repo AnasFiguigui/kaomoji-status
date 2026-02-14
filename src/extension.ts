@@ -1,84 +1,13 @@
 
+
 import * as vscode from 'vscode';
+import { kaomojiCategories } from './kaomoji/kaomojiData';
+import { getHolidayKaomojis, isFallbackHoliday } from './kaomoji/holidayKaomojis';
 
 let statusBarItem: vscode.StatusBarItem;
 let interval: NodeJS.Timeout | undefined;
 let isChanging = false; // Prevents rapid manual clicks
 
-const defaultKaomojis: string[] = [
-    "ψ(｀∇´)ψ", "(。・ω・。)", "(ง •̀_•́)ง", "(づ｡◕‿‿◕｡)づ",
-    "(¬‿¬)", "(☞ﾟヮﾟ)☞", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(╯°□°）╯︵ ┻━┻",
-    "(•_•) ( •_•)>⌐■-■ (⌐■_■)", "(✿◠‿◠)", "(ʘ‿ʘ)", "(>_<)",
-    "(^_^;)", "(o˘◡˘o)", "(~_^)", "(>ω<)", "(°ロ°)☝", "(¬_¬)",
-    "(>o<)", "(^o^)", "(^_^)/", "(T_T)", "(^_^)v", "(>_<)o",
-    "(￣(工)￣)", "(づ￣ 3￣)づ",
-    "(ﾉ≧ڡ≦)", "(¬‿¬ )", "( ͡° ͜ʖ ͡°)", "(☞ ͡° ͜ʖ ͡°)☞", "(づ｡◕‿‿◕｡)づ",
-    "(ノಠ益ಠ)ノ彡┻━┻", "(｡•́︿•̀｡)", "(✧ω✧)", "(ʕ•ᴥ•ʔ)", "(ʕ•́ᴥ•̀ʔっ",
-    "(ง'̀-'́)ง", "(ಥ﹏ಥ)", "(¬_¬\")", "( ͡ᵔ ͜ʖ ͡ᵔ )", "(☞ﾟ∀ﾟ)☞",
-    "(づ｡◕‿‿◕｡)づ", "(｡•̀ᴗ-)✧", "( ͡° ᴥ ͡°)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
-    "(｡•́‿•̀｡)", "(¬‿¬)", "( ͡° ͜ʖ ͡°)つ──☆*:・ﾟ", "( ͡° ͜ʖ ͡°)つ✂╰⋃╯"
-];
-
-const kaomojiCategories: Record<string, string[]> = {
-    happy: [
-        "(≧◡≦)", "(✿◠‿◠)", "(^_^)/", "(^_^)v", "(o˘◡˘o)", "(^o^)", "(•‿•)",
-        "(ﾉ≧ڡ≦)", "(｡•̀ᴗ-)✧", "( ͡° ͜ʖ ͡°)", "(｡•́‿•̀｡)", "(✧ω✧)"
-    ],
-    angry: [
-        "(╯°□°）╯︵ ┻━┻", "ψ(｀∇´)ψ", "(¬_¬)", "(>_<)o", "(>o<)", "(ง •̀_•́)ง",
-        "(ノಠ益ಠ)ノ彡┻━┻", "(¬_¬\")", "(ง'̀-'́)ง"
-    ],
-    cute: [
-        "(｡♥‿♥｡)", "(づ｡◕‿‿◕｡)づ", "(づ￣ 3￣)づ", "(。・ω・。)", "(~_^)",
-        "(｡•́︿•̀｡)", "(｡•̀ᴗ-)✧", "(ʕ•ᴥ•ʔ)", "(｡•́‿•̀｡)", "(ಥ﹏ಥ)"
-    ],
-    nerdy: [
-        "(•_•) ( •_•)>⌐■-■ (⌐■_■)", "(ʘ‿ʘ)", "(☞ﾟヮﾟ)☞",
-        "( ͡° ͜ʖ ͡°)", "( ͡° ᴥ ͡°)", "( ͡° ͜ʖ ͡°)つ──☆*:・ﾟ", "( ͡° ͜ʖ ͡°)つ✂╰⋃╯"
-    ],
-    all: [] // Will be filled with all kaomojis below
-};
-
-// Fill 'all' with all unique kaomojis from categories and default
-kaomojiCategories.all = Array.from(new Set(
-    Object.values(kaomojiCategories).flat().concat(defaultKaomojis)
-));
-
-/**
- * Returns kaomojis for the current holiday, or a fallback if not a holiday.
- */
-function getHolidayKaomojis(): string[] {
-    const now = new Date();
-    const month = now.getMonth() + 1; // JS months are 0-based
-    const day = now.getDate();
-
-    // Christmas: Dec 24-26
-    if (month === 12 && day >= 24 && day <= 26) {
-        return [
-            "🎄", "(*≧▽≦)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(＾▽＾)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧🎄", "(⌒▽⌒)☆", "(ﾉ´ヮ)ﾉ*:･ﾟ✧", "(★^O^★)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧*｡🎄"
-        ];
-    }
-    // Halloween: Oct 31
-    if (month === 10 && day === 31) {
-        return [
-            "🎃", "(*≧▽≦)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(¬‿¬)", "(ง •̀_•́)ง", "(ﾟДﾟ;)", "(ʘ‿ʘ)", "(ﾉ☉ヮ⚆)ﾉ ⊙▃⊙", "(ﾟдﾟ；)"
-        ];
-    }
-    // New Year: Jan 1
-    if (month === 1 && day === 1) {
-        return [
-            "🎆", "(*≧▽≦)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧", "(＾▽＾)", "(ﾉ´ヮ)ﾉ*:･ﾟ✧", "(★^O^★)", "(⌒▽⌒)☆", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧*｡🎆"
-        ];
-    }
-    // Valentine's Day: Feb 14
-    if (month === 2 && day === 14) {
-        return [
-            "(❤️ ω ❤️)", "(｡♥‿♥｡)", "(づ￣ 3￣)づ", "❤️❤️❤️", "( *^-^)ρ(*╯^╰)", "(｡♥‿♥｡)💌", "( ˘ ³˘)♥", "(♡°▽°♡)", "(｡･ω･｡)ﾉ♡"
-        ];
-    }
-    // Not a holiday: fallback to celebratory kaomojis
-    return ["(*≧▽≦)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"];
-}
 
 /**
  * Returns the list of kaomojis to use, based on user settings.
@@ -107,18 +36,6 @@ function getKaomojis(): string[] {
     return kaomojiCategories[category] || kaomojiCategories.all;
 }
 
-/**
- * Checks if the returned holiday kaomojis are just the fallback (not a real holiday).
- */
-function isFallbackHoliday(holidayList: string[]): boolean {
-    // Fallback is always ["(*≧▽≦)", "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"]
-    return (
-        Array.isArray(holidayList) &&
-        holidayList.length === 2 &&
-        holidayList[0] === "(*≧▽≦)" &&
-        holidayList[1] === "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"
-    );
-}
 
 /**
  * Picks a random kaomoji from the current list.
@@ -154,12 +71,25 @@ function startInterval() {
 }
 
 /**
- * Instantly change the kaomoji (manual click, no spinner).
+ * Instantly change the kaomoji (manual click, no spinner), never repeats the current kaomoji.
  */
 function changeKaomojiSmooth() {
-    if (isChanging) return;
+    if (isChanging) {
+        return;
+    }
     isChanging = true;
-    statusBarItem.text = getRandomKaomoji();
+    const current = statusBarItem.text;
+    let next = getRandomKaomoji();
+    // If more than 1 kaomoji, avoid repeating the current one
+    const kaomojis = getKaomojis();
+    if (kaomojis.length > 1) {
+        let tries = 0;
+        while (next === current && tries < 10) {
+            next = getRandomKaomoji();
+            tries++;
+        }
+    }
+    statusBarItem.text = next;
     statusBarItem.tooltip = "Click to change kaomoji";
     isChanging = false;
 }
