@@ -3,6 +3,7 @@
   "displayName": "Kaomoji Status",
   "description": "Fun animated kaomojis in your VS Code status bar!",
   "version": "0.0.1",
+  "license": "MIT",
   "author": {
     "name": "Anas Figuigui",
     "email": "anas.production.af@gmail.com"
@@ -46,7 +47,7 @@
     "extension"
   ],
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.109.0"
   },
   "categories": [
     "Other",
