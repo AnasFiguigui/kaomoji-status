@@ -2,8 +2,14 @@
   "name": "kaomoji-status",
   "displayName": "Kaomoji Status",
   "description": "Fun animated kaomojis in your VS Code status bar!",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "publisher": "AnasFiguigui",
   "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#0080ff",
+    "theme": "light"
+  },
   "author": {
     "name": "Anas Figuigui",
     "email": "anas.production.af@gmail.com"
@@ -16,7 +22,7 @@
     "url": "https://github.com/AnasFiguigui/kaomoji-status/issues"
   },
   "homepage": "https://github.com/AnasFiguigui/kaomoji-status#readme",
-  "icon": "images/icon.png",
+ 
   "keywords": [
     "kaomoji",
     "statusbar",
