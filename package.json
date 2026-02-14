@@ -23,8 +23,16 @@
       "properties": {
         "kaomojiStatus.interval": {
           "type": "number",
-          "default": 0.2,
+          "default": 10,
           "description": "Change interval in minutes"
+        },
+        "kaomojiStatus.customKaomojis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Custom list of kaomojis to use (replaces default list)"
         }
       }
     }

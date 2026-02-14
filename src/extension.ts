@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 
+
 let statusBarItem: vscode.StatusBarItem;
 let interval: NodeJS.Timeout | undefined;
 let isChanging = false; // Block spam clicks during manual change
 
-const kaomojis = [
+const defaultKaomojis = [
     "ψ(｀∇´)ψ",
     "(。・ω・。)",
     "(ง •̀_•́)ง",
@@ -12,10 +13,35 @@ const kaomojis = [
     "(¬‿¬)",
     "(☞ﾟヮﾟ)☞",
     "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
-    "(╯°□°）╯︵ ┻━┻"
+    "(╯°□°）╯︵ ┻━┻",
+    "(•_•) ( •_•)>⌐■-■ (⌐■_■)",
+    "(✿◠‿◠)",
+    "(ʘ‿ʘ)",
+    "(>_<)",
+    "(^_^;)",
+    "(o˘◡˘o)",
+    "(~_^)",
+    "(>ω<)",
+    "(°ロ°)☝",
+    "(¬_¬)",
+    "(>o<)",
+    "(^o^)",
+    "(^_^)/",
+    "(T_T)",
+    "(^_^)v",
+    "(>_<)o",
+    "(￣(工)￣)",
+    "(づ￣ 3￣)づ",
 ];
 
+function getKaomojis(): string[] {
+    const config = vscode.workspace.getConfiguration("kaomojiStatus");
+    const custom = config.get<string[]>("customKaomojis", []);
+    return (custom && custom.length > 0) ? custom : defaultKaomojis;
+}
+
 function getRandomKaomoji(): string {
+    const kaomojis = getKaomojis();
     return kaomojis[Math.floor(Math.random() * kaomojis.length)];
 }
 
@@ -27,7 +53,7 @@ function changeKaomojiInstant() {
 // Start the interval for auto-changing kaomoji
 function startInterval() {
     const config = vscode.workspace.getConfiguration("kaomojiStatus");
-    const minutes = config.get<number>("interval", 15);
+    const minutes = config.get<number>("interval", 10);
 
     if (interval) {
         clearInterval(interval);
@@ -56,8 +82,8 @@ async function changeKaomojiSmooth() {
     isChanging = false;
 }
 
-export function activate(context: vscode.ExtensionContext) {
 
+export function activate(context: vscode.ExtensionContext) {
     // Create status bar item on LEFT, end of left section
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left,
@@ -80,10 +106,14 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
-    // Listen for setting changes (live update interval)
+    // Listen for setting changes (live update interval and custom kaomojis)
     const configListener = vscode.workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration("kaomojiStatus.interval")) {
+        if (
+            e.affectsConfiguration("kaomojiStatus.interval") ||
+            e.affectsConfiguration("kaomojiStatus.customKaomojis")
+        ) {
             startInterval();
+            changeKaomojiInstant();
         }
     });
 
