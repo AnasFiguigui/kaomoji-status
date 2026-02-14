@@ -33,6 +33,12 @@
           },
           "default": [],
           "description": "Custom list of kaomojis to use (replaces default list)"
+        },
+        "kaomojiStatus.category": {
+          "type": "string",
+          "default": "all",
+          "enum": ["all", "happy", "angry", "cute", "nerdy"],
+          "description": "Kaomoji category/theme to use (all, happy, angry, cute, nerdy). On holidays, special kaomojis are shown automatically."
         }
       }
     }
