@@ -1,13 +1,56 @@
 {
   "name": "kaomoji-status",
-  "displayName": "kaomoji-status",
-  "description": "Status bar kaomojis generator",
+  "displayName": "Kaomoji Status",
+  "description": "Fun animated kaomojis in your VS Code status bar!",
   "version": "0.0.1",
+  "author": {
+    "name": "Anas Figuigui",
+    "email": "anas.production.af@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnasFiguigui/kaomoji-status"
+  },
+  "bugs": {
+    "url": "https://github.com/AnasFiguigui/kaomoji-status/issues"
+  },
+  "homepage": "https://github.com/AnasFiguigui/kaomoji-status#readme",
+  "icon": "images/icon.png",
+  "keywords": [
+    "kaomoji",
+    "statusbar",
+    "emoji",
+    "fun",
+    "animated",
+    "cute",
+    "vscode-extension",
+    "japanese emoticon",
+    "smile",
+    "faces",
+    "ascii art",
+    "mood",
+    "expression",
+    "toolbar",
+    "status bar",
+    "happy",
+    "angry",
+    "nerdy",
+    "cute kaomoji",
+    "holiday",
+    "christmas",
+    "halloween",
+    "valentine",
+    "new year",
+    "personalization",
+    "productivity",
+    "extension"
+  ],
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.80.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Themes"
   ],
   "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
