@@ -9,15 +9,25 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "kaomoji-status.helloWorld",
-        "title": "Hello World"
+        "command": "kaomojiStatus.change",
+        "title": "Change Kaomoji"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Kaomoji Status",
+      "properties": {
+        "kaomojiStatus.interval": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Change interval in minutes"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
