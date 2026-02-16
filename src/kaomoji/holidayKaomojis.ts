@@ -1,9 +1,37 @@
 // Holiday kaomojis and logic
 
-export function getHolidayKaomojis(): string[] {
+
+import * as vscode from 'vscode';
+
+
+// Returns kaomojis for a holiday or birthday, or undefined if not a holiday/birthday
+export function getHolidayKaomojis(): string[] | undefined {
     const now = new Date();
-    const month = now.getMonth() + 1; // JS months are 0-based
+    const month = now.getMonth() + 1;
     const day = now.getDate();
+
+    // Check for user birthday in settings
+    const config = vscode.workspace.getConfiguration("kaomojiStatus");
+    const birthday = config.get<string>("birthday", "");
+    const birthdayKaomojis = config.get<string[]>("birthdayKaomojis", []);
+    if (birthday && /^\d{2}-\d{2}$/.test(birthday)) {
+        const [bMonth, bDay] = birthday.split("-").map(Number);
+        if (month === bMonth && day === bDay) {
+            const base = [
+                "Happy Birthday! 🎉",
+                "Wishing you a wonderful year! 🎂",
+                "Have a fantastic birthday! 🥳",
+                "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
+                "(＾▽＾)",
+                "(★^O^★)"
+            ];
+            if (Array.isArray(birthdayKaomojis) && birthdayKaomojis.length > 0) {
+                return [...base, ...birthdayKaomojis];
+            } else {
+                return base;
+            }
+        }
+    }
 
     // Christmas: Dec 24-26
     if (month === 12 && day >= 24 && day <= 26) {
@@ -33,8 +61,8 @@ export function getHolidayKaomojis(): string[] {
             "(っ˶ ˘ ᵕ˘)ˆᵕ ˆ˶ς)", "ε(´｡•᎑•`)っ 💕", "(˶  >   ₃  < ˶)", "(˶ᵔ ᵕ ᵔ˶) <3"
         ];
     }
-    // Not a holiday: fallback to celebratory kaomojis
-    return ["ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧", "(つ╥﹏╥)つ"];
+    // Not a holiday or birthday
+    return undefined;
 }
 
 export function isFallbackHoliday(holidayList: string[]): boolean {

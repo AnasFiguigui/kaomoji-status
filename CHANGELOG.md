@@ -1,9 +1,14 @@
-# Change Log
-
-All notable changes to the "kaomoji-status" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+# Kaomoji Status Changelog
 
 ## [Unreleased]
 
-- Initial release
+## [1.0.3] - 2026-02-16
+### Added
+- Custom birthday kaomojis support
+
+## [1.0.2] - 2026-02-15
+### Added
+- More kaomoji categories
+
+## [1.0.1] - 2026-02-14
+### Initial release

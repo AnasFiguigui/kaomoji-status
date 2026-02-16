@@ -2,7 +2,7 @@
   "name": "kaomoji-status",
   "displayName": "Kaomoji Status",
   "description": "Fun animated kaomojis in your VS Code status bar!",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "publisher": "AnasFiguigui",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -71,10 +71,22 @@
     "configuration": {
       "title": "Kaomoji Status",
       "properties": {
-        "kaomojiStatus.interval": {
-          "type": "number",
-          "default": 10,
-          "description": "Change interval in minutes"
+        "kaomojiStatus.category": {
+          "type": "string",
+          "default": "all",
+          "enum": [
+            "all",
+            "happy",
+            "angry",
+            "cute",
+            "nerdy",
+            "sad",
+            "inlove",
+            "sleepy",
+            "pets",
+            "nature"
+          ],
+          "description": "Kaomoji category/theme to use (all, happy, angry, cute, pets...). On holidays, special kaomojis are shown automatically."
         },
         "kaomojiStatus.customKaomojis": {
           "type": "array",
@@ -84,11 +96,24 @@
           "default": [],
           "description": "Custom list of kaomojis to use (replaces default list)"
         },
-        "kaomojiStatus.category": {
+        "kaomojiStatus.interval": {
+          "type": "number",
+          "default": 10,
+          "description": "Change interval in minutes"
+        },
+        "kaomojiStatus.birthday": {
           "type": "string",
-          "default": "all",
-          "enum": ["all", "happy", "angry", "cute", "nerdy"],
-          "description": "Kaomoji category/theme to use (all, happy, angry, cute, nerdy). On holidays, special kaomojis are shown automatically."
+          "default": "",
+          "pattern": "^$|^\\d{2}-\\d{2}$",
+          "description": "Your birthday in MM-DD format (e.g., 02-16). Used to show special birthday kaomojis."
+        },
+        "kaomojiStatus.birthdayKaomojis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Custom kaomojis to show on your birthday (optional)."
         }
       }
     }

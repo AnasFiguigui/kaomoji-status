@@ -21,19 +21,33 @@ function getKaomojis(): string[] {
         return custom;
     }
     const category = config.get<string>("category", "all");
-    // If user explicitly selects holiday, always use holiday kaomojis
+    // If user explicitly selects holiday, always use holiday kaomojis (if any)
     if (category === "holiday") {
-        return getHolidayKaomojis();
-    }
-    // If user selects 'all', but today is a holiday, override with holiday kaomojis
-    if (category === "all") {
         const holiday = getHolidayKaomojis();
-        // If not fallback (i.e., it's a real holiday), use it
-        if (!isFallbackHoliday(holiday)) {
+        if (holiday && holiday.length > 0) {
             return holiday;
         }
+        // If no holiday, fallback to all
+        if (Array.isArray(kaomojiCategories.all) && kaomojiCategories.all.length > 0) {
+            return kaomojiCategories.all;
+        }
+        // Fallback to defaultKaomojis if all is empty
+        return require('./kaomoji/kaomojiData').defaultKaomojis;
     }
-    return kaomojiCategories[category] || kaomojiCategories.all;
+    // If today is a holiday or birthday, use those kaomojis
+    const holiday = getHolidayKaomojis();
+    if (holiday && holiday.length > 0) {
+        return holiday;
+    }
+    // Otherwise, use the selected category
+    let list = kaomojiCategories[category];
+    if (!Array.isArray(list) || list.length === 0) {
+        list = kaomojiCategories.all;
+    }
+    if (!Array.isArray(list) || list.length === 0) {
+        list = require('./kaomoji/kaomojiData').defaultKaomojis;
+    }
+    return list;
 }
 
 
