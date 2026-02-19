@@ -105,6 +105,8 @@ function changeKaomojiSmooth() {
     }
     statusBarItem.text = next;
     statusBarItem.tooltip = "Click to change kaomoji";
+    // Reset the interval timer so the user's choice is not immediately overwritten
+    startInterval();
     isChanging = false;
 }
 
